@@ -1,15 +1,28 @@
+import "server-only";
 import { cookies } from "next/headers";
-import { ROLE_PERMISSIONS, type Permission, type Role } from "./roles";
+import { verifyToken } from "./jwt";
 
-export type User = { id: string; name: string; roles: Role[] };
+export type User = {
+  id: string;
+  role: "viewer" | "editor";
+};
 
-export function getUserFromCookies(): User | null {
-  const role = cookies().get("role")?.value as Role | undefined;
-  if (!role) return null;
-  return { id: "u1", name: "Ash", roles: [role] };
+export async function getUserFromToken(): Promise<User | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return null;
+
+  const payload = verifyToken(token);
+  if (!payload) return null;
+
+  return {
+    id: payload.userId,
+    role: payload.role,
+  };
 }
 
-export function can(user: User | null, permission: Permission): boolean {
+export function can(user: User | null, permission: string) {
   if (!user) return false;
-  return user.roles.some((r) => ROLE_PERMISSIONS[r]?.includes(permission));
+  if (permission === "pokemon:detail:view") return user.role === "editor";
+  return true;
 }

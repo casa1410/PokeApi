@@ -1,5 +1,6 @@
 import { getPokemonDetail } from "@/lib/poke/service";
-import { getUserFromCookies, can } from "@/lib/auth/server-auth";
+import { getUserFromToken, can } from "@/lib/auth/server-auth";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function PokemonDetailPage({
@@ -7,15 +8,10 @@ export default async function PokemonDetailPage({
 }: {
   params: { name: string };
 }) {
-  const user = getUserFromCookies();
+  const user = await getUserFromToken();
+
   if (!can(user, "pokemon:detail:view")) {
-    return (
-      <main>
-        <h1>Acceso denegado</h1>
-        <p>No tienes permisos para ver el detalle.</p>
-        <Link href="/pokemon">Volver</Link>
-      </main>
-    );
+    redirect("/login");
   }
 
   const data = await getPokemonDetail(params.name);
@@ -23,9 +19,11 @@ export default async function PokemonDetailPage({
   return (
     <main>
       <Link href="/pokemon">← Volver</Link>
+
       <h1>
         {data.name} (#{data.id})
       </h1>
+
       {data.sprites.front_default && (
         <img
           src={data.sprites.front_default}
@@ -34,13 +32,16 @@ export default async function PokemonDetailPage({
           height={200}
         />
       )}
+
       <p>
         <strong>Tipos:</strong> {data.types.map((t) => t.type.name).join(", ")}
       </p>
+
       <p>
         <strong>Altura:</strong> {data.height} | <strong>Peso:</strong>{" "}
         {data.weight}
       </p>
+
       <section>
         <h2>Habilidades</h2>
         <ul>

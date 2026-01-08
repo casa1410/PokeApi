@@ -1,19 +1,13 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const url = new URL(req.nextUrl);
-  const isDetail = /^\/pokemon\/[^\/]+$/.test(url.pathname);
-  if (!isDetail) return NextResponse.next();
+  const token = req.cookies.get("token")?.value;
 
-  const role = req.cookies.get("role")?.value as
-    | "viewer"
-    | "editor"
-    | undefined;
-  const canViewDetail = role === "editor";
-  if (!canViewDetail) {
-    url.pathname = "/acceso-denegado";
-    return NextResponse.rewrite(url);
+  if (!token && req.nextUrl.pathname.startsWith("/pokemon")) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
+
   return NextResponse.next();
 }
 

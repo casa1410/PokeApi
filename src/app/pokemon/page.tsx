@@ -1,39 +1,91 @@
-import { getPokemonList } from "@/lib/poke/service";
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
+import GenerationSelect from "@/components/GenerationSelect";
+import { getGenerationDetail } from "@/lib/poke/service";
+import { formatPokemonName } from "@/lib/poke/format";
 
-export const dynamic = "force-static";
+export default async function PokemonPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ gen?: string }>;
+}) {
+  const sp = await searchParams;
+  const gen = clampGen(Number(sp.gen ?? "1"));
+  const data = await getGenerationDetail(gen);
 
-export default async function PokemonListPage() {
-  const { items } = await getPokemonList(24, 0);
   return (
-    <main>
-      <h1>Pokémon</h1>
+    <main
+      style={{
+        padding: "3rem 2rem",
+        minHeight: "100vh",
+      }}
+    >
+      <h1 style={{ marginBottom: "1rem" }}>Pokedex</h1>
+      <GenerationSelect />
+      <h2 style={{ marginTop: "1.5rem", marginBottom: "1.5rem" }}>
+        Generación {toRoman(gen)} · {data.species.length} Pokémon
+      </h2>
+
       <ul
         style={{
+          listStyle: "none",
+          padding: 0,
+          margin: 0,
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-          gap: 12,
+          gap: "1rem",
         }}
       >
-        {items.map((p) => (
-          <li
-            key={p.id}
-            style={{ border: "1px solid #eee", borderRadius: 8, padding: 12 }}
-          >
-            <img src={p.sprite ?? ""} alt={p.name} width={120} height={120} />
-            <div
+        {data.species.map((p) => (
+          <li key={p.id}>
+            <Link
+              href={`/pokemon/${p.name}`}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                display: "block",
+                border: "1px solid rgba(255,255,255,0.18)",
+                borderRadius: 12,
+                padding: 12,
+                background: "rgba(0,0,0,0.2)",
+                textDecoration: "none",
+                transition: "transform 120ms ease, box-shadow 120ms ease",
               }}
             >
-              <strong>{p.name}</strong>
-              <Link href={`/pokemon/${p.name}`}>Detalle</Link>
-            </div>
+              <div
+                style={{
+                  display: "grid",
+                  placeItems: "center",
+                  minHeight: 120,
+                }}
+              >
+                <img src={p.sprite} alt={p.name} width={120} height={120} />
+              </div>
+
+              <div
+                style={{
+                  textAlign: "center",
+                  marginTop: 8,
+                  fontWeight: 700,
+                }}
+              >
+                {formatPokemonName(p.name)}
+              </div>
+            </Link>
           </li>
         ))}
       </ul>
     </main>
   );
+}
+
+function clampGen(n: number) {
+  if (!Number.isFinite(n)) return 1;
+  if (n < 1) return 1;
+  if (n > 9) return 9;
+  return n;
+}
+
+function toRoman(n: number) {
+  const map = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
+  return map[n - 1] ?? String(n);
 }

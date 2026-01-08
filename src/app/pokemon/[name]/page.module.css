@@ -1,0 +1,80 @@
+.main {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 3rem 2rem;
+  }
+  
+  .card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    width: min(420px, 90%);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  }
+  
+  .errorCard {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    width: min(400px, 90%);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  }
+  
+  .name {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+  }
+  
+  .sprite {
+    image-rendering: pixelated;
+    margin-bottom: 1.5rem;
+  }
+  
+  .noImage {
+    width: 180px;
+    height: 180px;
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin: 0 auto 1.5rem;
+  }
+  
+  .info {
+    display: grid;
+    gap: 0.5rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+  }
+  
+  .abilityList {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.4rem;
+  }
+  
+  .backLink {
+    display: block;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+  
+  .backLink:hover {
+    color: white;
+  }
+  

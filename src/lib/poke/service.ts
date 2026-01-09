@@ -1,16 +1,7 @@
-import { PokemonDetailSchema, GenerationDetailSchema } from "./schemas";
-
-const API = "https://pokeapi.co/api/v2";
-
-async function safeFetch<T>(input: string): Promise<T> {
-  const res = await fetch(input);
-  if (!res.ok) throw new Error(`PokeAPI error ${res.status}`);
-  return res.json() as Promise<T>;
-}
+import { getGenerationAPI, getPokemonAPI } from "./api";
 
 export async function getGenerationDetail(id: number) {
-  const data = await safeFetch(`${API}/generation/${id}`);
-  const parsed = GenerationDetailSchema.parse(data);
+  const parsed = await getGenerationAPI(id);
 
   const species = parsed.pokemon_species
     .map((s) => {
@@ -27,19 +18,5 @@ export async function getGenerationDetail(id: number) {
 }
 
 export async function getPokemonDetail(name: string) {
-  const res = await fetch(`${API}/pokemon/${name}`);
-
-  if (res.ok) {
-    const data = (await res.json()) as unknown;
-    return PokemonDetailSchema.parse(data);
-  }
-
-  if (res.status === 404) {
-    const res2 = await fetch(`${API}/pokemon-species/${name}`);
-    if (res2.ok) {
-      return res2.json();
-    }
-  }
-
-  throw new Error(`PokeAPI error ${res.status}`);
+  return await getPokemonAPI(name);
 }

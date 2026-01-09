@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { loginUser } from "@/lib/auth/service";
 import styles from "./login.module.css";
 
 export default function LoginClientPage() {
@@ -15,24 +16,17 @@ export default function LoginClientPage() {
     setLoading(true);
 
     const form = new FormData(e.currentTarget);
+    const email = form.get("email") as string;
+    const password = form.get("password") as string;
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: form.get("email"),
-        password: form.get("password"),
-      }),
-    });
-
-    if (!res.ok) {
+    try {
+      await loginUser(email, password);
+      router.push("/pokemon");
+      router.refresh();
+    } catch {
       setError("Credenciales inválidas");
       setLoading(false);
-      return;
     }
-
-    router.push("/pokemon");
-    router.refresh();
   }
 
   return (
@@ -48,10 +42,6 @@ export default function LoginClientPage() {
 
         <section className={styles.card}>
           <h2 className={styles.cardTitle}>Iniciar sesión</h2>
-          <p className={styles.cardSub}>
-            Usa las credenciales demo para entrar
-          </p>
-
           <form onSubmit={onSubmit} className={styles.form}>
             <label className={styles.label}>
               Email
@@ -73,29 +63,8 @@ export default function LoginClientPage() {
             <button className={styles.primaryBtn} disabled={loading}>
               {loading ? "Ingresando..." : "Ingresar"}
             </button>
-
-            <button
-              type="button"
-              className={styles.secondaryBtn}
-              onClick={() => {
-                (
-                  document.querySelector(
-                    'input[name="email"]'
-                  ) as HTMLInputElement
-                ).value = "admin@poke.com";
-                (
-                  document.querySelector(
-                    'input[name="password"]'
-                  ) as HTMLInputElement
-                ).value = "123456";
-              }}
-            >
-              Usar demo
-            </button>
           </form>
         </section>
-
-        <footer className={styles.footer}>SSR · Token · Roles</footer>
       </div>
     </main>
   );

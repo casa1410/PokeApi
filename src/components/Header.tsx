@@ -1,11 +1,15 @@
 "use client";
 
+import { logoutUser } from "@/lib/auth/service";
 
 export function Header() {
-
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    window.location.href = "/login";
+    try {
+      await logoutUser();
+      window.location.href = "/login";
+    } catch {
+      alert("Error al cerrar sesión");
+    }
   };
 
   return (
@@ -24,15 +28,7 @@ export function Header() {
         zIndex: 50,
       }}
     >
-      <h1
-        style={{
-          fontSize: "1.3rem",
-          fontWeight: 800,
-          letterSpacing: "1px",
-        }}
-      >
-        PokeApp
-      </h1>
+      <h1 style={{ fontSize: "1.3rem", fontWeight: 800 }}>PokeApp</h1>
       <button
         onClick={handleLogout}
         style={{
@@ -42,7 +38,6 @@ export function Header() {
           color: "#fff",
           background: "transparent",
           cursor: "pointer",
-          transition: "all 0.2s ease",
         }}
       >
         Cerrar sesión

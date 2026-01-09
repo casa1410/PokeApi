@@ -1,0 +1,39 @@
+@keyframes pulse {
+    0% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.4;
+    }
+  }
+  
+  .container {
+    padding: 3rem 2rem;
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .title {
+    width: 30%;
+    height: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  
+  .card {
+    height: 200px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  

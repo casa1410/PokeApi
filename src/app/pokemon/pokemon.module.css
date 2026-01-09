@@ -1,0 +1,36 @@
+.grid {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  
+  .card {
+    display: block;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    text-decoration: none;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.35);
+  }
+  
+  .imageWrap {
+    display: grid;
+    place-items: center;
+    min-height: 120px;
+  }
+  
+  .name {
+    text-align: center;
+    margin-top: 8px;
+    font-weight: 700;
+  }
+  

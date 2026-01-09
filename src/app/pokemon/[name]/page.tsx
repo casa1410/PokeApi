@@ -44,7 +44,7 @@ export default async function PokemonDetailPage({
           }}
         >
           <Link href="/pokemon" className={styles.backLink}>
-            ← Volver
+            {"<- Volver"}
           </Link>
 
           <h1 className={styles.name}>{formatPokemonName(data.name)}</h1>
@@ -96,7 +96,7 @@ export default async function PokemonDetailPage({
         <article className={styles.errorCard}>
           <h1>Pokémon no encontrado!</h1>
           <Link href="/pokemon" className={styles.backLink}>
-            ← Volver
+          {"<- Volver"}
           </Link>
         </article>
       </main>

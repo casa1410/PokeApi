@@ -23,6 +23,8 @@ export async function getUserFromToken(): Promise<User | null> {
 
 export function can(user: User | null, permission: string) {
   if (!user) return false;
-  if (permission === "pokemon:detail:view") return user.role === "editor";
+  if (permission === "pokemon:detail:view") {
+    return user.role === "editor";
+  }
   return true;
 }

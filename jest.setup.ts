@@ -37,26 +37,16 @@ if (
       configurable: true,
     });
 
-    if (typeof globalThis.TextEncoder === "undefined") {
-      Object.defineProperty(globalThis, "TextEncoder", {
-        value: TextEncoder,
+    if (typeof globalThis.Request === "undefined") {
+      Object.defineProperty(globalThis, "Request", {
+        value: Request,
         writable: false,
         configurable: true,
       });
     }
-
-    if (typeof globalThis.TextDecoder === "undefined") {
-      Object.defineProperty(globalThis, "TextDecoder", {
-        value: TextDecoder,
-        writable: false,
-        configurable: true,
-      });
-    }
-
-    if (typeof globalThis.ReadableStream === "undefined") {
-      const { ReadableStream } = required("web-streams-polyfill/ponyfill");
-      Object.defineProperty(globalThis, "ReadableStream", {
-        value: ReadableStream,
+    if (typeof globalThis.Response === "undefined") {
+      Object.defineProperty(globalThis, "Response", {
+        value: Response,
         writable: false,
         configurable: true,
       });
